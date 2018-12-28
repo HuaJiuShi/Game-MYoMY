@@ -1,11 +1,11 @@
 #include <iostream>
 #include <Windows.h>
 #include <process.h>
-#define house "---·¿×Ó---"
-#define home  "---ÎÒÃÇµÄ¼Ò---"
+#define house "---æˆ¿å­---"
+#define home  "---æˆ‘ä»¬çš„å®¶---"
 using namespace std;
-int loveDifficult, g_nKey, My_X, My_Y, Your_X, Your_Y, MyLove, YourLove, LoveTime, LoveFlag = 0;	//°®µÄÄÑ¶È¡¢°´¼üĞÅÏ¢¡¢¿ØÖÆÌ¨¹â±êX¡¢Y×ø±ê
-HANDLE hIn, hOut;	//ÊäÈë/Êä³öÉè±¸¾ä±ú
+int loveDifficult, g_nKey, My_X, My_Y, Your_X, Your_Y, MyLove, YourLove, LoveTime, LoveFlag = 0;	//çˆ±çš„éš¾åº¦ã€æŒ‰é”®ä¿¡æ¯ã€æ§åˆ¶å°å…‰æ ‡Xã€Yåæ ‡
+HANDLE hIn, hOut;	//è¾“å…¥/è¾“å‡ºè®¾å¤‡å¥æŸ„
 COORD  Outchar;
 void KeyPressed(void* b);
 void LovePositionSetting(int x, int y);
@@ -14,21 +14,21 @@ int main() {
 	Outchar.X = 40; Outchar.Y = 0;
 	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO CursorInfo;
-	GetConsoleCursorInfo(hOut, &CursorInfo);//»ñÈ¡¿ØÖÆÌ¨¹â±êĞÅÏ¢
-	CursorInfo.bVisible = false;			//Òş²Ø¿ØÖÆÌ¨¹â±ê
-	SetConsoleCursorInfo(hOut, &CursorInfo);//ÉèÖÃ¿ØÖÆÌ¨¹â±ê×´Ì¬
-	system("mode con cols=90 lines=50");	//½øÈëÓÎÏ·½çÃæ
-	//ÏÔÊ¾ÓÎÏ·»­Ãæ
-	LovePositionSetting(32, 0); cout << "Ç°Â·ÂşÂş£¬ÎŞ·¨»ØÍ·£¬ÑÛÇ°Ö»ÓĞËı" << endl;
-	LovePositionSetting(30, 1); cout << "Ô½¹ıÕâÌõÏß£¬Óö²»µ½Ëı£¬Äã½«Ê§È¥ËùÓĞ" << endl;
-	LovePositionSetting(0, 49); cout << "²Ù×÷ËµÃ÷£ºÊ¹ÓÃ¡û¡ı¡úÈı¸ö·½Ïò¼ü£¬¿ØÖÆ'ÎÒ'ÒÆ¶¯£¬ÎŞ·¨»ØÍ·¡ª¡ª²½ÂÄ²»Í££¬ÖÕ½«ÏàÓö";
-	LovePositionSetting(0, loveDifficult + 3);	//»æÖÆ×îºóµÄÏß
+	GetConsoleCursorInfo(hOut, &CursorInfo);//è·å–æ§åˆ¶å°å…‰æ ‡ä¿¡æ¯
+	CursorInfo.bVisible = false;			//éšè—æ§åˆ¶å°å…‰æ ‡
+	SetConsoleCursorInfo(hOut, &CursorInfo);//è®¾ç½®æ§åˆ¶å°å…‰æ ‡çŠ¶æ€
+	system("mode con cols=90 lines=50");	//è¿›å…¥æ¸¸æˆç•Œé¢
+	//æ˜¾ç¤ºæ¸¸æˆç”»é¢
+	LovePositionSetting(32, 0); cout << "å‰è·¯æ¼«æ¼«ï¼Œæ— æ³•å›å¤´ï¼Œçœ¼å‰åªæœ‰å¥¹" << endl;
+	LovePositionSetting(30, 1); cout << "è¶Šè¿‡è¿™æ¡çº¿ï¼Œé‡ä¸åˆ°å¥¹ï¼Œä½ å°†å¤±å»æ‰€æœ‰" << endl;
+	LovePositionSetting(0, 49); cout << "æ“ä½œè¯´æ˜ï¼šä½¿ç”¨â†â†“â†’ä¸‰ä¸ªæ–¹å‘é”®ï¼Œæ§åˆ¶'æˆ‘'ç§»åŠ¨ï¼Œæ— æ³•å›å¤´â€”â€”æ­¥å±¥ä¸åœï¼Œç»ˆå°†ç›¸é‡ã€‚";
+	LovePositionSetting(0, loveDifficult + 3);	//ç»˜åˆ¶æœ€åçš„çº¿
 	for (int i = 0; i < 90; i++) cout << '-';
 	LovePositionSetting(41, 3);  cout << house << endl;
-	LovePositionSetting(45, 4);			//ÉèÖÃ¡°ÎÒ¡±µÄ³õÊ¼³ö·¢Î»ÖÃ
-	Your_Y = loveDifficult + 4;			//ËıÒ»Ö±ÔÚÖÕµã£¬Ò¡°Ú
-	_beginthread(KeyPressed, 0, NULL);	//·Ö³öÒ»¸öÏß³Ì£¬ÈÃ°´¼üÒ»Ö±¼à¿Ø¡£
-	while (1) {							//ÓÎÏ·Ã¿100msË¢ĞÂÒ»´Î×´Ì¬£¬500msÈËÎï×Ô¶¯ÒÆ¶¯Ò»´Î
+	LovePositionSetting(45, 4);			//è®¾ç½®â€œæˆ‘â€çš„åˆå§‹å‡ºå‘ä½ç½®
+	Your_Y = loveDifficult + 4;			//å¥¹ä¸€ç›´åœ¨ç»ˆç‚¹ï¼Œæ‘‡æ‘†
+	_beginthread(KeyPressed, 0, NULL);	//åˆ†å‡ºä¸€ä¸ªçº¿ç¨‹ï¼Œè®©æŒ‰é”®ä¸€ç›´ç›‘æ§ã€‚
+	while (1) {							//æ¸¸æˆå¼€å§‹ï¼Œæ¯100msåˆ·æ–°ä¸€æ¬¡çŠ¶æ€ï¼Œ500msäººç‰©è‡ªåŠ¨ç§»åŠ¨ä¸€æ¬¡
 		Sleep(100);
 		(g_nKey == 37 || g_nKey == 39 || g_nKey == 40) ? MyLove = 0 : (MyLove == 5 ? MyLove = 0 : MyLove++);
 		Outchar.X = My_X; Outchar.Y = My_Y; SetConsoleCursorPosition(hOut, Outchar); cout << "  ";
@@ -39,48 +39,47 @@ int main() {
 			g_nKey = 0;
 		}else
 			My_Y++;
-		LovePositionSetting(My_X, My_Y); cout << "ÎÒ";
+		LovePositionSetting(My_X, My_Y); cout << "æˆ‘";
 		LoveTime = (My_Y == Your_Y - 1) ? LoveTime + 1 : LoveTime;
-		//ÅĞ¶Ï×¼Ôò
+		//åˆ¤æ–­å‡†åˆ™
 		LoveFlag = (LoveTime == 50) ? 3 : LoveFlag;		//3:overtime,you have no chance
 		LoveFlag = (My_Y == Your_Y + 5) ? 1 : LoveFlag;	//1:miss
 		LoveFlag = (My_Y == Your_Y) ? (((My_X - Your_X >= -1) && (My_X - Your_X <= 1)) ? 2 : LoveFlag) : LoveFlag;	//2:meet
-
-		//°²ÅÅĞÄÖĞµÄ Äã ¶¯£¬Ëæ»ú³õÊ¼»¯Î»ÖÃÔË¶¯
-		YourLove == 5 ? YourLove = 0 : YourLove++;
+		//å®‰æ’å¿ƒä¸­çš„ ä½  åŠ¨ï¼Œéšæœºåˆå§‹åŒ–ä½ç½®è¿åŠ¨
+		YourLove == 4 ? YourLove = 0 : YourLove++;
 		if (YourLove == 4 && !LoveFlag) {
 			Outchar.X = Your_X; Outchar.Y = Your_Y; SetConsoleCursorPosition(hOut, Outchar); cout << "  ";
 			Your_X = rand() % 50 + 20;
-			Outchar.X = Your_X; Outchar.Y = Your_Y; SetConsoleCursorPosition(hOut, Outchar); cout << "Ëı";
+			Outchar.X = Your_X; Outchar.Y = Your_Y; SetConsoleCursorPosition(hOut, Outchar); cout << "å¥¹";
 			LovePositionSetting(My_X, My_Y);
 		}
 		if (LoveFlag) break;
 	}
 	if (LoveFlag == 1) {
 		LovePositionSetting(31, Your_Y - 20);
-		cout << "°®²»»áÖØÀ´£¬´í¹ıÁË£¬¾ÍÈÃËıÈ¥°É£¡";
+		cout << "çˆ±ä¸ä¼šé‡æ¥ï¼Œé”™è¿‡äº†ï¼Œå°±è®©å¥¹å»å§ï¼";
 	}
 	else if (LoveFlag == 3) {
 		LovePositionSetting(36, Your_Y - 20);
-		cout << "Î·¾å²»Ç°£¬ÄãÃ»»ú»áÁË£¡";
+		cout << "ç•æƒ§ä¸å‰ï¼Œä½ æ²¡æœºä¼šäº†ï¼";
 	}
 	else if(LoveFlag == 2) {
 		if (My_X > Your_X) {
-			LovePositionSetting(My_X, Your_Y); cout << "ÎÒÃÇ";
+			LovePositionSetting(My_X, Your_Y); cout << "æˆ‘ä»¬";
 		}else {
-			LovePositionSetting(Your_X, Your_Y); cout << "ÎÒÃÇ";
+			LovePositionSetting(Your_X, Your_Y); cout << "æˆ‘ä»¬";
 		}
-		LovePositionSetting(34, Your_Y - 20);
-		cout << "Óö¼ûÄã£¬ÊÇÎÒ½ñÉú×î´óµÄĞÒ¸££¡";
+		LovePositionSetting(36, Your_Y - 20);
+		cout << "è°¢è°¢ä½ ï¼Œè®©æˆ‘é‡è§äº†ä½ ï¼";
 		system("color 3D");
 		LovePositionSetting(39, 3);  cout << home << endl;
 	}
-	LovePositionSetting(0, Your_Y+10); cout << "ÓÎÏ·½áÊø£¬Çë½ØÍ¼ºó°´q¼üÍË³ö£¡";
+	LovePositionSetting(0, Your_Y+10); cout << "æ¸¸æˆç»“æŸï¼Œè¯·æˆªå›¾åæŒ‰qé”®é€€å‡ºï¼";
 	while (g_nKey != 81) { Sleep(100); }
 	return 0;
 }
-void KeyPressed(void* b) {	//°´¼üÊÂ¼ş´¦Àí·½·¨
-	hIn = GetStdHandle(STD_INPUT_HANDLE); // »ñÈ¡±ê×¼ÊäÈëÉè±¸¾ä±ú
+void KeyPressed(void* b) {	//æŒ‰é”®äº‹ä»¶å¤„ç†æ–¹æ³•
+	hIn = GetStdHandle(STD_INPUT_HANDLE); // è·å–æ ‡å‡†è¾“å…¥è®¾å¤‡å¥æŸ„
 	INPUT_RECORD keyRec;
 	DWORD state = 0, res;
 	for (;;){
